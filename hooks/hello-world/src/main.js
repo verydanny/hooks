@@ -1,11 +1,20 @@
 import { Client } from 'node-appwrite';
+import { getRequestListener } from '@hono/node-server';
+
 import { Hono } from 'hono'
 
 const app = new Hono()
 
 app.get('/', (c) => c.text('Hello Node.js!'))
 
-export default app
+export default async ({ req, res, log, error }) => {
+    const customListener = getRequestListener(app.fetch, {
+        errorHandler: error,
+        overrideGlobalObjects: true,
+    })
+
+    return customListener(req, res)
+}
 
 // This is your Appwrite function
 // It's executed each time we get a request

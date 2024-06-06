@@ -8,6 +8,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@hono/node-server": "^1.11.2",
     "hono": "^4.4.3",
     "node-appwrite": "^13.0.0"
   },
