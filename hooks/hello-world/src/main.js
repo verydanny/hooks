@@ -14,7 +14,7 @@ export default async ({ req, res, log, error }) => {
         error(err)
       }
 
-      req.send(err)
+      res.json(err)
     },
     overrideGlobalObjects: true,
   })
