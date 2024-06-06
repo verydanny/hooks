@@ -11,15 +11,13 @@ export default async ({ req, res, log, error }) => {
   const customListener = getRequestListener(app.fetch, {
     errorHandler: (err) => {
       if (err) {
-        error(err)
+        return error(err)
       }
 
-      res.json(err)
+      return res.json(err)
     },
     overrideGlobalObjects: true,
   })
-
-  console.log(res)
 
   return customListener(req, res.send)
 }
