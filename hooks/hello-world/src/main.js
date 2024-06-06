@@ -19,6 +19,8 @@ export default async ({ req, res, log, error }) => {
     overrideGlobalObjects: true,
   })
 
+  console.log(res)
+
   return customListener(req, res.send)
 }
 
