@@ -34,7 +34,9 @@ export default async ({ req, res, log, error }) => {
   const staticFolder = path.join(__dirname, '../static')
 
   log(process.cwd())
+  log(__dirname)
   log(fs.readdirSync(__dirname).join('\n'))
+  log(path.relative(process.cwd(), __dirname))
 
   try {
     const response = await initRequestListener(req, res)
