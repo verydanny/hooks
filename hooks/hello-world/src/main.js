@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { Client } from 'node-appwrite'
+import { fileURLToPath } from 'node:url'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Buffer } from 'node:buffer'
 import * as fs from 'node:fs'
@@ -34,6 +35,10 @@ app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
 //   })
 // }
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const staticFolder = path.join(__dirname, '../static')
+
 export default async ({ req, res, log, error }) => {
   const { url, body, bodyRaw, ...rest } = req
   const newRequest = new Request(new URL(url), rest)
@@ -45,11 +50,10 @@ export default async ({ req, res, log, error }) => {
   const bufferFromArrayBuffer = Buffer.from(awaitArrayBuffer, 'utf-8')
 
   log(process.cwd())
-  log(fs.readdirSync(path.resolve(process.cwd())).toString())
-  log(fs.readdirSync(path.resolve(process.cwd(), './src/')).toString())
-  log(fs.readdirSync(path.resolve(process.cwd(), './src/function/')).toString())
-  log(fs.readdirSync(path.resolve(process.cwd(), './src/function/static/')).toString())
-  log(path.relative(path.resolve(process.cwd(), './src/function/static/'), process.cwd()))
+  log(import.meta.url)
+  log(__filename)
+  log(__dirname)
+  log(staticFolder)
 
   return res.send(bufferFromArrayBuffer, 200, {
     'Content-Type': contentType,
