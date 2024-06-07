@@ -35,13 +35,13 @@ export default async ({ req, res, log, error }) => {
   const body = req?.method === 'GET' || req?.method === 'HEAD' ? undefined : req.body
 
   try {
-    const response = await initRequestListener(req, res)
-    // const normalizedRequest = new Request(new URL(req.url), {
-    //   headers: req.headers,
-    //   body,
-    //   method: req.method
-    // })
-    // const response = await app.fetch(normalizedRequest)
+    // const response = await initRequestListener(req, res)
+    const normalizedRequest = new Request(new URL(req.url), {
+      headers: req.headers,
+      body,
+      method: req.method
+    })
+    const response = await app.fetch(normalizedRequest)
     // const text = await response.text()
 
     // If it's text, then send text
@@ -54,9 +54,13 @@ export default async ({ req, res, log, error }) => {
       headers[key] = value
     }
 
+    const theBody = response.body
+
+
+
     // const normalizedStream = Readable.fromWeb(response.body)
 
-    return res.send(Readable.from(response.body()), 200, headers)
+    return res.send(Readable.from(response.body), 200, headers)
   } catch (e) {
     error(e)
   }
