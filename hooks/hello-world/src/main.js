@@ -3,29 +3,12 @@
  */
 import { fileURLToPath } from 'node:url'
 import * as path from 'node:path'
+import * as fs from 'node:fs'
 import { Readable, Stream } from 'node:stream'
 
 import { Hono } from 'hono'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { getRequestListener } from './getRequestListener.mjs'
-
-const app = new Hono()
-
-/**
- * `root` in serveStatic has to be based on cwd, so when my CURRENT function's root directory is `hooks/hello-world`
- * and my OPEN_RUNTIMES_ENTRYPOINT=`main.js` then process.cwd() should be `/usr/local/server`
- * and my hook should be in `/usr/local/server/src/function/src/main.js`, and that works PERFECTLY locally
- * (I mocked with node 21.0 and open-runtime's `server.js`), it can't find my files in the container
- */
-app.use('/static/*', serveStatic({ root: './src/function/src/' }))
-
-// Setting up routes with HONO work ...mostly
-app.get('/', (c) => c.text('Hello open-runtime!'))
-app.get('/some/other/route', (c) => c.text('<html>Some html</html>'))
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const staticFolder = path.join(__dirname, '../static')
 
 const requestListener = getRequestListener(app.fetch, {
   overrideGlobalObjects: true,
@@ -33,6 +16,27 @@ const requestListener = getRequestListener(app.fetch, {
 
 export default async ({ req, res, log, error }) => {
   const initRequestListener = requestListener(error)
+
+  /**
+   * `root` in serveStatic has to be based on cwd, so when my CURRENT function's root directory is `hooks/hello-world`
+   * and my OPEN_RUNTIMES_ENTRYPOINT=`main.js` then process.cwd() should be `/usr/local/server`
+   * and my hook should be in `/usr/local/server/src/function/src/main.js`, and that works PERFECTLY locally
+   * (I mocked with node 21.0 and open-runtime's `server.js`), it can't find my files in the container
+   */
+  app.use('/static/*', serveStatic({ root: './src/function/src/' }))
+
+  // Setting up routes with HONO work ...mostly
+  app.get('/', (c) => c.text('Hello open-runtime!'))
+  app.get('/some/other/route', (c) => c.text('<html>Some html</html>'))
+
+  const __filename = fileURLToPath(import.meta.url)
+  const __dirname = path.dirname(__filename)
+  const staticFolder = path.join(__dirname, '../static')
+
+  log(process.cwd())
+  log(fs.readdirSync(__dirname).join('\n'))
+
+  const app = new Hono()
 
   try {
     const response = await initRequestListener(req, res)
