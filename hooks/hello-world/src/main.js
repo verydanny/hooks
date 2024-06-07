@@ -45,7 +45,7 @@ export default async ({ req, res, log, error }) => {
 
   log(process.cwd())
 
-  log(fs.readdirSync(process.cwd()))
+  log(fs.readdirSync(process.cwd()).toString())
 
   return res.send(bufferFromArrayBuffer, 200, {
     'Content-Type': contentType,
