@@ -111,10 +111,9 @@ var createStreamBody = (stream) => {
   return body;
 };
 var serveStatic = (options = { root: "" }) => {
-  const logger = options?.logger
-
   return async (c, next) => {
-    logger(c.finalized)
+
+    return c.json(JSON.stringify(c));
   
     if (c.finalized) {
       return next();

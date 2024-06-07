@@ -12,7 +12,9 @@ import { getRequestListener } from './getRequestListener.mjs'
 
 const app = new Hono()
 
-let logger
+export const logger = new Promise((res, rej) => {
+  return res((actualLogger) => actualLogger)
+})
 
 /**
    * `root` in serveStatic has to be based on cwd, so when my CURRENT function's root directory is `hooks/hello-world`
@@ -26,12 +28,11 @@ app.use('/static/*', serveStatic({ root: './src/function/src/', logger }))
 app.get('/', (c) => c.text('Hello open-runtime!'))
 app.get('/some/other/route', (c) => c.text('<html>Some html</html>'))
 
-const requestListener = getRequestListener(app.fetch, {
-  overrideGlobalObjects: true,
-})
-
 export default async ({ req, res, log, error }) => {
-  logger = log
+  const requestListener = getRequestListener(app.fetch, {
+    overrideGlobalObjects: true
+  })
+
   const initRequestListener = requestListener(error)
 
   const __filename = fileURLToPath(import.meta.url)

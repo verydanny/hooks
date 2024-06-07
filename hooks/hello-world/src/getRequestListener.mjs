@@ -38,7 +38,6 @@ var newRequestFromIncoming = (method, url, incoming, abortController) => {
   };
 
   const normalizedGlobalRequest = new GlobalRequest(url, init)
-  logger.info(normalizedGlobalRequest)
 
   return new Request(url, init);
 };
@@ -394,7 +393,7 @@ var getRequestListener = (fetchCallback, options = {}) => {
   
       try {
         req = newRequest(incoming, options.hostname);
-        res = fetchCallback(req, { incoming, outgoing });
+        res = fetchCallback(req, { incoming, outgoing, logger: options?.logger });
   
         // if (cacheKey in res) {
         //   logger.info('Is there')
