@@ -39,7 +39,7 @@ export default async ({ req, res, log, error }) => {
   const output = await app.fetch(newRequest)
 
   const contentType = output.headers.get('Content-Type')
-  const awaitArrayBuffer = output.arrayBuffer()
+  const awaitArrayBuffer = await output.arrayBuffer()
   const bufferFromArrayBuffer = Buffer.from(awaitArrayBuffer, 'utf-8')
 
   log(process.cwd())
