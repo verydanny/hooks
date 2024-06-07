@@ -23,11 +23,11 @@ app.get('/some/other/route', (c) => c.html(
 ))
 
 export default async ({ req, res, log, error }) => {
-  // const requestListener = getRequestListener(app.fetch, {
-  //   overrideGlobalObjects: true
-  // })
+  const requestListener = getRequestListener(app.fetch, {
+    overrideGlobalObjects: true
+  })
 
-  // const initRequestListener = requestListener(error)
+  const initRequestListener = requestListener(error)
 
   // const __filename = fileURLToPath(import.meta.url)
   // const __dirname = path.dirname(__filename)
@@ -35,13 +35,13 @@ export default async ({ req, res, log, error }) => {
   const body = req?.method === 'GET' || req?.method === 'HEAD' ? undefined : req.body
 
   try {
-    // const response = await initRequestListener(req, res)
-    const normalizedRequest = new Request(new URL(req.url), {
-      headers: req.headers,
-      body,
-      method: req.method
-    })
-    const response = await app.fetch(normalizedRequest)
+    const response = await initRequestListener(req, res)
+    // const normalizedRequest = new Request(new URL(req.url), {
+    //   headers: req.headers,
+    //   body,
+    //   method: req.method
+    // })
+    // const response = await app.fetch(normalizedRequest)
     // const text = await response.text()
 
     // If it's text, then send text
