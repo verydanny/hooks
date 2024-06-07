@@ -117,14 +117,15 @@ var serveStatic = (options = { root: "" }) => {
     if (c.finalized) {
       return next();
     }
+
+    logger('testing')
+
     const filename = options.path ?? decodeURIComponent(c.req.path);
     let path = getFilePath({
       filename: options.rewriteRequestPath ? options.rewriteRequestPath(filename) : filename,
       root: options.root,
       defaultDocument: options.index ?? "index.html"
     });
-
-    logger(filename)
 
     if (!path) {
       return next();
