@@ -55,6 +55,7 @@ export default async ({ req, res, log, error }) => {
   log(__filename)
   log(__dirname)
   log(staticFolder)
+  log(path.relative(process.cwd(), staticFolder))
 
   return res.send(bufferFromArrayBuffer, 200, {
     'Content-Type': contentType,
