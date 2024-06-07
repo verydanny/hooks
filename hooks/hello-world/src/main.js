@@ -19,7 +19,7 @@ app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
 
 export default async ({ req, res, log, error }) => {
   const requestListener = getRequestListener(app.fetch, {
-    overrideGlobalObjects: false
+    overrideGlobalObjects: true
   })
 
   const initRequestListener = requestListener(error)
@@ -43,12 +43,12 @@ export default async ({ req, res, log, error }) => {
     error(e)
   }
 
-  return res.json(
-    {
-      hello: 'world',
-    },
-    200
-  )
+  // return res.json(
+  //   {
+  //     hello: 'world',
+  //   },
+  //   200
+  // )
 }
 
 // This is your Appwrite function
