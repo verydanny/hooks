@@ -11,8 +11,10 @@
   "dependencies": {
     "@hono/node-server": "^1.11.2",
     "hono": "^4.4.4",
+    "micro": "^10.0.1",
     "node-appwrite": "^13.0.0",
-    "micro": "^9.3.4"
+    "pino": "^9.1.0",
+    "pino-pretty": "^11.1.0"
   },
   "devDependencies": {
     "prettier": "^3.3.1",

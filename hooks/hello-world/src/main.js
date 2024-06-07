@@ -1,96 +1,65 @@
-import { Hono } from 'hono'
-import { Client } from 'node-appwrite'
+/**
+ * Using node-21.0 open-runtime
+ */
 import { fileURLToPath } from 'node:url'
-import { serveStatic } from '@hono/node-server/serve-static'
-import { Buffer } from 'node:buffer'
-import * as fs from 'node:fs'
 import * as path from 'node:path'
+import { Readable, Stream } from 'node:stream'
+
+import { Hono } from 'hono'
+import { serveStatic } from '@hono/node-server/serve-static'
+import { getRequestListener } from './getRequestListener.mjs'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: 'src/function' }))
-app.use('/static1/*', serveStatic({ root: 'function' }))
-app.get('/', (c) => c.text('Hello Node.js!'))
+/**
+ * `root` in serveStatic has to be based on cwd, so when my CURRENT function's root directory is `hooks/hello-world`
+ * and my OPEN_RUNTIMES_ENTRYPOINT=`main.js` then process.cwd() should be `/usr/local/server`
+ * and my hook should be in `/usr/local/server/src/function/src/main.js`, and that works PERFECTLY locally
+ * (I mocked with node 21.0 and open-runtime's `server.js`), it can't find my files in the container
+ */
+app.use('/static/*', serveStatic({ root: '../' }))
+
+// Setting up routes with HONO work ...mostly
+app.get('/', (c) => c.text('Hello open-runtime!'))
 app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
-
-// async function streamToBuffer(readableStream) {
-//   return new Promise((resolve, reject) => {
-//     const chunks = [];
-
-//     readableStream.on('data', data => {
-//       if (typeof data === 'string') {
-//         chunks.push(Buffer.from(data, 'utf-8'))
-//       } else if (data instanceof Buffer) {
-//         chunks.push(data)
-//       } else {
-//         const jsonData = JSON.stringify(data);
-//         chunks.push(Buffer.from(jsonData, 'utf-8'))
-//       }
-//     });
-
-//     readableStream.on('end', () => {
-//       resolve(Buffer.concat(chunks))
-//     })
-
-//     readableStream.on('error', reject)
-//   })
-// }
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const staticFolder = path.join(__dirname, '../static')
 
+const requestListener = getRequestListener(app.fetch, {
+  overrideGlobalObjects: true,
+})
+
 export default async ({ req, res, log, error }) => {
-  const { url, body, bodyRaw, ...rest } = req
-  const newRequest = new Request(new URL(url), rest)
+  const initRequestListener = requestListener(error)
 
-  const output = await app.fetch(newRequest)
+  try {
+    const returnedRequest = initRequestListener(req, res)
+    // Fix to stream blob with stream chunks based on content-size
+    // const streamBlob = (await returnedRequest.blob()).stream()
 
-  const contentType = output.headers.get('Content-Type')
-  const awaitArrayBuffer = await output.arrayBuffer()
-  const bufferFromArrayBuffer = Buffer.from(awaitArrayBuffer, 'utf-8')
+    if (returnedRequest?.body?.constructor?.name === 'ReadableStream') {
+      const webToReadableStream = Readable.fromWeb(returnedRequest.body, {
+        encoding: 'utf-8',
+      })
 
-  console.log(output.url.toString())
-  console.log(output.headers.get('content-size'))
+      const contentType = returnedRequest.headers.get('Content-Type')
+      return res.send(webToReadableStream, 200, {
+        'Content-Type': contentType,
+      })
+    }
+  } catch (e) {
+    error(e)
+  }
 
-  // console.log(process.cwd())
-  // console.log(import.meta.url.toString())
-  // console.log(JSON.stringify(import.meta))
-  // console.log(__filename)
-  // console.log(__dirname)
-  // console.log(staticFolder)
-  log(process.cwd())
-  log(fs.readdirSync(process.cwd()).toString())
-  log('nnn')
-  log(path.resolve(process.cwd(), 'src'))
-  log(fs.readdirSync(path.resolve(process.cwd(), 'src')).toString())
-  log('nnn')
-  log(path.resolve(process.cwd(), 'src/function'))
-  log(fs.readdirSync(path.resolve(process.cwd(), 'src/function')).toString())
-  log('nnn')
-  log(path.resolve(process.cwd(), 'src/function/src'))
-  log(fs.readdirSync(path.resolve(process.cwd(), 'src/function/src')).toString())
-  // log(path.relative(process.cwd(), path.resolve('../', staticFolder)))
-
-  return res.send(bufferFromArrayBuffer, 200, {
-    'Content-Type': contentType,
-  })
+  return res.json(
+    {
+      hello: 'world',
+    },
+    200
+  )
 }
-
-// export default async ({ req, res, log, error }) => {
-//   const customListener = getRequestListener(app.fetch, {
-//     errorHandler: (err) => {
-//       if (err) {
-//         return error(err)
-//       }
-
-//       return res.json(err)
-//     },
-//     overrideGlobalObjects: true,
-//   })
-
-//   return customListener(req, res.send)
-// }
 
 // This is your Appwrite function
 // It's executed each time we get a request
