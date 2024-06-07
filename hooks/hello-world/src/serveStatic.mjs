@@ -113,7 +113,7 @@ var createStreamBody = (stream) => {
 var serveStatic = (options = { root: "" }) => {
   return async (c, next) => {
 
-    return c.json(JSON.stringify(c));
+    return c.text(JSON.stringify(c));
   
     if (c.finalized) {
       return next();
