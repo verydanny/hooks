@@ -127,7 +127,10 @@ var serveStatic = (options = { root: "" }) => {
     if (!path) {
       return next();
     }
+
     path = `./${path}`;
+
+    return c.text(path)
     if (!existsSync(path)) {
       await options.onNotFound?.(path, c);
       return next();
