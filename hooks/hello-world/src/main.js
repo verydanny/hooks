@@ -55,6 +55,9 @@ export default async ({ req, res, log, error }) => {
   const awaitArrayBuffer = await output.arrayBuffer()
   const bufferFromArrayBuffer = Buffer.from(awaitArrayBuffer, 'utf-8')
 
+  console.log(output.url.toString())
+  console.log(output.headers.get('content-size'))
+
   // console.log(process.cwd())
   // console.log(import.meta.url.toString())
   // console.log(JSON.stringify(import.meta))
