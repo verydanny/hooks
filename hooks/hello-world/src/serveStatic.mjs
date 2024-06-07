@@ -114,11 +114,11 @@ var serveStatic = (options = { root: "" }) => {
   const logger = options?.logger
 
   return async (c, next) => {
+    logger(c.finalized)
+  
     if (c.finalized) {
       return next();
     }
-
-    logger('testing')
 
     const filename = options.path ?? decodeURIComponent(c.req.path);
     let path = getFilePath({
