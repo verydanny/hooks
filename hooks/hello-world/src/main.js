@@ -8,13 +8,8 @@ import * as path from 'node:path'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: './' }))
-app.use('/static1/*', serveStatic({ root: './src' }))
-app.use('/static2/*', serveStatic({ root: './src/' }))
-app.use('/static3/*', serveStatic({ root: './src/function' }))
-app.use('/static4/*', serveStatic({ root: './src/function/' }))
-app.use('/static5/*', serveStatic({ root: './src/function/static' }))
-app.use('/static6/*', serveStatic({ root: './src/function/static/' }))
+app.use('/static/*', serveStatic({ root: 'src/function' }))
+app.use('/static1/*', serveStatic({ root: 'function' }))
 app.get('/', (c) => c.text('Hello Node.js!'))
 app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
 
