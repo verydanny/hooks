@@ -111,7 +111,7 @@ var createStreamBody = (stream) => {
   return body;
 };
 var serveStatic = (options = { root: "" }) => {
-  const logger = options?.log
+  const logger = options?.logger
 
   logger('started')
 

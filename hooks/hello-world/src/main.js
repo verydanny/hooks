@@ -12,23 +12,27 @@ import { getRequestListener } from './getRequestListener.mjs'
 
 const app = new Hono()
 
-export default async ({ req, res, log, error }) => {
-  const requestListener = getRequestListener(app.fetch, {
-    overrideGlobalObjects: true,
-  })
-  const initRequestListener = requestListener(error)
+let logger
 
-  /**
+/**
    * `root` in serveStatic has to be based on cwd, so when my CURRENT function's root directory is `hooks/hello-world`
    * and my OPEN_RUNTIMES_ENTRYPOINT=`main.js` then process.cwd() should be `/usr/local/server`
    * and my hook should be in `/usr/local/server/src/function/src/main.js`, and that works PERFECTLY locally
    * (I mocked with node 21.0 and open-runtime's `server.js`), it can't find my files in the container
    */
-  app.use('/static/*', serveStatic({ root: './src/function/src/', log }))
+app.use('/static/*', serveStatic({ root: './src/function/src/', logger }))
 
-  // Setting up routes with HONO work ...mostly
-  app.get('/', (c) => c.text('Hello open-runtime!'))
-  app.get('/some/other/route', (c) => c.text('<html>Some html</html>'))
+// Setting up routes with HONO work ...mostly
+app.get('/', (c) => c.text('Hello open-runtime!'))
+app.get('/some/other/route', (c) => c.text('<html>Some html</html>'))
+
+const requestListener = getRequestListener(app.fetch, {
+  overrideGlobalObjects: true,
+})
+
+export default async ({ req, res, log, error }) => {
+  logger = log
+  const initRequestListener = requestListener(error)
 
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
@@ -36,8 +40,6 @@ export default async ({ req, res, log, error }) => {
 
   try {
     const response = await initRequestListener(req, res)
-
-    log(JSON.stringify(response))
 
     // Fix to stream blob with stream chunks based on content-size
     // const streamBlob = (await response.blob()).stream()
