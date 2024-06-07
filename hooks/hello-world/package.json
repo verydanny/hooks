@@ -5,12 +5,14 @@
   "main": "src/main.js",
   "type": "module",
   "scripts": {
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "start": "OPEN_RUNTIMES_ENTRYPOINT=main.js node ./src/serve.cjs"
   },
   "dependencies": {
     "@hono/node-server": "^1.11.2",
     "hono": "^4.4.3",
-    "node-appwrite": "^13.0.0"
+    "node-appwrite": "^13.0.0",
+    "micro": "^9.3.4"
   },
   "devDependencies": {
     "prettier": "^3.3.1",

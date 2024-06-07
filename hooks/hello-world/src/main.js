@@ -1,16 +1,49 @@
-import { Client } from 'node-appwrite'
-import { getRequestListener, serve } from '@hono/node-server'
-
 import { Hono } from 'hono'
+import { Client } from 'node-appwrite'
+import { serveStatic } from '@hono/node-server/serve-static'
+import { Buffer } from 'node:buffer'
 
 const app = new Hono()
 
+app.use('/static/*', serveStatic({ root: '' }))
 app.get('/', (c) => c.text('Hello Node.js!'))
+app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
+
+// async function streamToBuffer(readableStream) {
+//   return new Promise((resolve, reject) => {
+//     const chunks = [];
+
+//     readableStream.on('data', data => {
+//       if (typeof data === 'string') {
+//         chunks.push(Buffer.from(data, 'utf-8'))
+//       } else if (data instanceof Buffer) {
+//         chunks.push(data)
+//       } else {
+//         const jsonData = JSON.stringify(data);
+//         chunks.push(Buffer.from(jsonData, 'utf-8'))
+//       }
+//     });
+
+//     readableStream.on('end', () => {
+//       resolve(Buffer.concat(chunks))
+//     })
+
+//     readableStream.on('error', reject)
+//   })
+// }
 
 export default async ({ req, res, log, error }) => {
-  serve({
-    fetch: app.fetch,
-    port: 3002,
+  const { url, body, bodyRaw, ...rest } = req
+  const newRequest = new Request(new URL(url), rest)
+
+  const output = await app.fetch(newRequest)
+
+  const contentType = output.headers.get('Content-Type')
+  const awaitSomething = await output.arrayBuffer()
+  const bufferFromArrayBuffer = Buffer.from(awaitSomething)
+
+  return res.send(bufferFromArrayBuffer, 200, {
+    'Content-Type': contentType,
   })
 }
 
