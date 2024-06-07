@@ -7,7 +7,7 @@ import * as fs from 'node:fs'
 import { Readable, Stream } from 'node:stream'
 
 import { Hono } from 'hono'
-import { serveStatic } from '@hono/node-server/serve-static'
+import { serveStatic } from './serveStatic.mjs'
 import { getRequestListener } from './getRequestListener.mjs'
 
 export default async ({ req, res, log, error }) => {
@@ -23,7 +23,7 @@ export default async ({ req, res, log, error }) => {
    * and my hook should be in `/usr/local/server/src/function/src/main.js`, and that works PERFECTLY locally
    * (I mocked with node 21.0 and open-runtime's `server.js`), it can't find my files in the container
    */
-  app.use('/static/*', serveStatic({ root: './src/function/src/' }))
+  app.use('/static/*', serveStatic({ root: './src/function/src/', log }))
 
   // Setting up routes with HONO work ...mostly
   app.get('/', (c) => c.text('Hello open-runtime!'))
@@ -32,11 +32,6 @@ export default async ({ req, res, log, error }) => {
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
   const staticFolder = path.join(__dirname, '../static')
-
-  log(process.cwd())
-  log(__dirname)
-  log(fs.readdirSync(__dirname).join('\n'))
-  log(path.relative(process.cwd(), __dirname))
 
   try {
     const response = await initRequestListener(req, res)
