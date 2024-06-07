@@ -13,7 +13,7 @@ import { getRequestListener } from './getRequestListener.mjs'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: 'src/function' }))
+// app.use('/static/*', serveStatic({ root: 'src/function' }))
 
 app.get('/', (c) => c.html('Hello open-runtime!'))
 app.get('/some/other/route', (c) => c.html(
@@ -23,15 +23,15 @@ app.get('/some/other/route', (c) => c.html(
 ))
 
 export default async ({ req, res, log, error }) => {
-  const requestListener = getRequestListener(app.fetch, {
-    overrideGlobalObjects: true
-  })
+  // const requestListener = getRequestListener(app.fetch, {
+  //   overrideGlobalObjects: true
+  // })
 
-  const initRequestListener = requestListener(error)
+  // const initRequestListener = requestListener(error)
 
-  const __filename = fileURLToPath(import.meta.url)
-  const __dirname = path.dirname(__filename)
-  const staticFolder = path.join(__dirname, '../static')
+  // const __filename = fileURLToPath(import.meta.url)
+  // const __dirname = path.dirname(__filename)
+  // const staticFolder = path.join(__dirname, '../static')
   const body = req?.method === 'GET' || req?.method === 'HEAD' ? undefined : req.body
 
   try {
