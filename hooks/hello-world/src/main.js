@@ -8,7 +8,7 @@ import * as path from 'node:path'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: 'src/function' }))
+app.use('/static/*', serveStatic({ root: 'function' }))
 app.get('/', (c) => c.text('Hello Node.js!'))
 app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
 
@@ -56,7 +56,6 @@ export default async ({ req, res, log, error }) => {
   // console.log(__dirname)
   // console.log(staticFolder)
   log(process.cwd())
-  log('nnn')
   log(fs.readdirSync(process.cwd()).toString())
   log('nnn')
   log(path.resolve(process.cwd(), 'src'))
