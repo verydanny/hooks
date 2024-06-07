@@ -49,14 +49,14 @@ export default async ({ req, res, log, error }) => {
     // If it's data, send Readable
 
 
-    let headers = {}
-    for (const [key, value] of response.headers.entries()) {
-      headers[key] = value
-    }
+    // let headers = {}
+    // for (const [key, value] of response.headers.entries()) {
+    //   headers[key] = value
+    // }
 
-    const normalizedStream = Readable.fromWeb(response.body)
+    // const normalizedStream = Readable.fromWeb(response.body)
 
-    return res.send('DONGO', 200, headers)
+    return res.send(await response.text(), 200, headers)
   } catch (e) {
     error(e)
   }
