@@ -1,26 +1,26 @@
 const fs = require('fs')
 const http = require("http");
 const util = require('util')
+const micro = require('micro')
 const { text: parseText, json: parseJson, send, serve } = require('micro')
 
 const USER_CODE_PATH = '/Users/danny/source/hooks/hooks/hello-world/'
 
-const server = new http.Server(
-  serve(async (req, res) => {
-    try {
-      await action(req, res)
-    } catch (e) {
-      console.log(e)
-      const logs = []
-      const errors = [e.stack || e]
-      res.setHeader('x-open-runtimes-logs', encodeURIComponent(logs.join('\n')))
-      res.setHeader(
-        'x-open-runtimes-errors',
-        encodeURIComponent(errors.join('\n'))
-      )
-      return send(res, 500, '')
-    }
-  })
+const server = micro(async (req, res) => {
+  try {
+    await action(req, res)
+  } catch (e) {
+    console.log(e)
+    const logs = []
+    const errors = [e.stack || e]
+    res.setHeader('x-open-runtimes-logs', encodeURIComponent(logs.join('\n')))
+    res.setHeader(
+      'x-open-runtimes-errors',
+      encodeURIComponent(errors.join('\n'))
+    )
+    return send(res, 500, '')
+  }
+}
 )
 
 const action = async (req, res) => {
@@ -277,6 +277,8 @@ const action = async (req, res) => {
 
   res.setHeader('x-open-runtimes-logs', encodeURIComponent(logs.join('\n')))
   res.setHeader('x-open-runtimes-errors', encodeURIComponent(errors.join('\n')))
+
+  console.log(output)
 
   return send(res, output.statusCode, output.body)
 }

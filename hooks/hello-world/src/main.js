@@ -13,7 +13,7 @@ import { getRequestListener } from './getRequestListener.mjs'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: 'src/function' }))
+app.use('/static/*', serveStatic({ root: '' }))
 
 app.get('/', (c) => c.html('Hello open-runtime!'))
 app.get('/some/other/route', (c) => c.html(
@@ -35,19 +35,14 @@ export default async ({ req, res, log, error }) => {
   const body = req?.method === 'GET' || req?.method === 'HEAD' ? undefined : req.body
 
   try {
-    // const response = await initRequestListener(req, res)
-    const normalizedRequest = new Request(new URL(req.url), {
-      headers: req.headers,
-      body,
-      method: req.method
-    })
-    const response = await app.fetch(normalizedRequest)
+    const response = await initRequestListener(req, res)
+    // const normalizedRequest = new Request(new URL(req.url), {
+    //   headers: req.headers,
+    //   body,
+    //   method: req.method
+    // })
+    // const response = await app.fetch(normalizedRequest)
     // const text = await response.text()
-
-    // If it's text, then send text
-
-    // If it's data, send Readable
-
 
     let headers = {}
     for (const [key, value] of response.headers.entries()) {
