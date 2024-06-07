@@ -10,12 +10,11 @@ import { Hono } from 'hono'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { getRequestListener } from './getRequestListener.mjs'
 
-const requestListener = getRequestListener(app.fetch, {
-  overrideGlobalObjects: true,
-})
-
 export default async ({ req, res, log, error }) => {
   const app = new Hono()
+  const requestListener = getRequestListener(app.fetch, {
+    overrideGlobalObjects: true,
+  })
   const initRequestListener = requestListener(error)
 
   /**
