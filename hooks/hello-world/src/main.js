@@ -10,8 +10,9 @@ import { Hono } from 'hono'
 import { serveStatic } from './serveStatic.mjs'
 import { getRequestListener } from './getRequestListener.mjs'
 
+const app = new Hono()
+
 export default async ({ req, res, log, error }) => {
-  const app = new Hono()
   const requestListener = getRequestListener(app.fetch, {
     overrideGlobalObjects: true,
   })
@@ -35,6 +36,8 @@ export default async ({ req, res, log, error }) => {
 
   try {
     const response = await initRequestListener(req, res)
+
+    log(JSON.stringify(response))
 
     // Fix to stream blob with stream chunks based on content-size
     // const streamBlob = (await response.blob()).stream()
