@@ -148,7 +148,7 @@ var serveStatic = (options = { root: "" }) => {
     const range = c.req.header("range") || "";
     if (!range) {
       c.header("Content-Length", size.toString());
-      return c.body(createReadStream(path), 200);
+      return c.body(createStreamBody(createReadStream(path)), 200);
     }
     c.header("Accept-Ranges", "bytes");
     c.header("Date", stat.birthtime.toUTCString());
@@ -162,7 +162,7 @@ var serveStatic = (options = { root: "" }) => {
     const stream = createReadStream(path, { start, end });
     c.header("Content-Length", chunksize.toString());
     c.header("Content-Range", `bytes ${start}-${end}/${stat.size}`);
-    return c.body(stream, 206);
+    return c.body(createStreamBody(stream), 206);
   };
 };
 export {

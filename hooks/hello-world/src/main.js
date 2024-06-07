@@ -27,9 +27,22 @@ export default async ({ req, res, log, error }) => {
   const __filename = fileURLToPath(import.meta.url)
   const __dirname = path.dirname(__filename)
   const staticFolder = path.join(__dirname, '../static')
+  const body = req?.method === 'GET' || req?.method === 'HEAD' ? undefined : req.body
 
   try {
-    const response = await initRequestListener(req, res)
+    // const response = await initRequestListener(req, res)
+    const normalizedRequest = new Request(new URL(req.url), {
+      headers: req.headers,
+      body,
+      method: req.method
+    })
+    const response = await app.fetch(normalizedRequest)
+    // const text = await response.text()
+
+    // If it's text, then send text
+
+    // If it's data, send Readable
+
 
     let headers = {}
     for (const [key, value] of response.headers.entries()) {
@@ -37,18 +50,18 @@ export default async ({ req, res, log, error }) => {
     }
 
     const normalizedStream = Readable.fromWeb(response.body)
-   
+
     return res.send(normalizedStream, 200, headers)
   } catch (e) {
     error(e)
   }
 
-  // return res.json(
-  //   {
-  //     hello: 'world',
-  //   },
-  //   200
-  // )
+  return res.json(
+    {
+      hello: 'world',
+    },
+    200
+  )
 }
 
 // This is your Appwrite function
