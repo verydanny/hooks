@@ -45,8 +45,10 @@ export default async ({ req, res, log, error }) => {
   const bufferFromArrayBuffer = Buffer.from(awaitArrayBuffer, 'utf-8')
 
   log(process.cwd())
-
-  log(fs.readdirSync(path.resolve(process.cwd(), './src/function/static')).toString())
+  log(fs.readdirSync(path.resolve(process.cwd())).toString())
+  log(fs.readdirSync(path.resolve(process.cwd(), './src/')).toString())
+  log(fs.readdirSync(path.resolve(process.cwd(), './src/function/')).toString())
+  log(fs.readdirSync(path.resolve(process.cwd(), './src/function/static/')).toString())
 
   return res.send(bufferFromArrayBuffer, 200, {
     'Content-Type': contentType,
