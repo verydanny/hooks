@@ -21,7 +21,7 @@ app.use('/static/*', serveStatic({ root: '../' }))
 
 // Setting up routes with HONO work ...mostly
 app.get('/', (c) => c.text('Hello open-runtime!'))
-app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
+app.get('/some/other/route', (c) => c.text('<html>Some html</html>'))
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -39,7 +39,6 @@ export default async ({ req, res, log, error }) => {
 
     // Fix to stream blob with stream chunks based on content-size
     // const streamBlob = (await response.blob()).stream()
-
     if (response?.body?.constructor?.name === 'ReadableStream') {
       const webToReadableStream = Readable.fromWeb(response.body, {
         encoding: 'utf-8',
