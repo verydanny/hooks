@@ -17,7 +17,7 @@ const app = new Hono()
  * and my hook should be in `/usr/local/server/src/function/src/main.js`, and that works PERFECTLY locally
  * (I mocked with node 21.0 and open-runtime's `server.js`), it can't find my files in the container
  */
-app.use('/static/*', serveStatic({ root: '../' }))
+app.use('/static/*', serveStatic({ root: './src/function/src/' }))
 
 // Setting up routes with HONO work ...mostly
 app.get('/', (c) => c.text('Hello open-runtime!'))
