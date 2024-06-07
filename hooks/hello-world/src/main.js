@@ -56,7 +56,18 @@ export default async ({ req, res, log, error }) => {
   // console.log(__dirname)
   // console.log(staticFolder)
   log(process.cwd())
-  log(path.resolve('../', path.relative(process.cwd(), path.resolve('../', staticFolder))))
+  log('nnn')
+  log(fs.readdirSync(process.cwd()).toString())
+  log('nnn')
+  log(path.resolve(process.cwd(), 'src'))
+  log(fs.readdirSync(path.resolve(process.cwd(), 'src')).toString())
+  log('nnn')
+  log(path.resolve(process.cwd(), 'src/function'))
+  log(fs.readdirSync(path.resolve(process.cwd(), 'src/function')).toString())
+  log('nnn')
+  log(path.resolve(process.cwd(), 'src/function/static'))
+  log(fs.readdirSync(path.resolve(process.cwd(), 'src/function/static')).toString())
+  // log(path.relative(process.cwd(), path.resolve('../', staticFolder)))
 
   return res.send(bufferFromArrayBuffer, 200, {
     'Content-Type': contentType,
