@@ -8,7 +8,7 @@ import * as path from 'node:path'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: 'src/function' }))
+app.use('/static/*', serveStatic({ root: './' }))
 app.get('/', (c) => c.text('Hello Node.js!'))
 app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
 
@@ -49,13 +49,13 @@ export default async ({ req, res, log, error }) => {
   const awaitArrayBuffer = await output.arrayBuffer()
   const bufferFromArrayBuffer = Buffer.from(awaitArrayBuffer, 'utf-8')
 
-  log(process.cwd())
-  log(import.meta.url.toString())
-  log(JSON.stringify(import.meta))
-  log(__filename)
-  log(__dirname)
-  log(staticFolder)
-  log(path.relative(process.cwd(), staticFolder))
+  // console.log(process.cwd())
+  // console.log(import.meta.url.toString())
+  // console.log(JSON.stringify(import.meta))
+  // console.log(__filename)
+  // console.log(__dirname)
+  // console.log(staticFolder)
+  console.log(path.relative(process.cwd(), staticFolder))
 
   return res.send(bufferFromArrayBuffer, 200, {
     'Content-Type': contentType,
