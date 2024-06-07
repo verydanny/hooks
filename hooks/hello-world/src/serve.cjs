@@ -278,7 +278,7 @@ const action = async (req, res) => {
   res.setHeader('x-open-runtimes-logs', encodeURIComponent(logs.join('\n')))
   res.setHeader('x-open-runtimes-errors', encodeURIComponent(errors.join('\n')))
 
-  return send(res, output.statusCode, await output.body)
+  return send(res, output.statusCode, output.body)
 }
 
 server.listen(3002)

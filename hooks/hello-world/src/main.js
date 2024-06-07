@@ -18,11 +18,11 @@ const app = new Hono()
    * and my hook should be in `/usr/local/server/src/function/src/main.js`, and that works PERFECTLY locally
    * (I mocked with node 21.0 and open-runtime's `server.js`), it can't find my files in the container
    */
-app.use('/static/*', serveStatic({ root: 'src/function' }))
+app.use('/static/*', serveStatic({ root: '' }))
 
 // Setting up routes with HONO work ...mostly
-app.get('/', (c) => c.text('Hello open-runtime!'))
-app.get('/some/other/route', (c) => c.text('<html>Some html</html>'))
+app.get('/', (c) => c.html('Hello open-runtime!'))
+app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
 
 export default async ({ req, res, log, error }) => {
   const requestListener = getRequestListener(app.fetch, {
@@ -37,20 +37,11 @@ export default async ({ req, res, log, error }) => {
 
   try {
     const response = await initRequestListener(req, res)
-
-    // Fix to stream blob with stream chunks based on content-size
-    // const streamBlob = (await response.blob()).stream()
-    if (response?.body?.constructor?.name === 'ReadableStream') {
-      const webToReadableStream = Readable.fromWeb(response.body, {
-        encoding: 'utf-8',
-      })
-
-      const contentType = response.headers.get('Content-Type')
-
-      return res.send(webToReadableStream, 200, {
-        'Content-Type': contentType,
-      })
-    }
+    const normalizedStream = Readable.fromWeb(await response.body)
+   
+    return res.send(normalizedStream, 200, {
+      ...response.headers
+    })
   } catch (e) {
     error(e)
   }
