@@ -1,10 +1,4 @@
-import { Buffer } from 'node:buffer'
 import { Http2ServerRequest } from "http2";
-import pino from 'pino'
-
-const logger = pino({
-  level: 'trace'
-})
 
 var GlobalRequest = global.Request;
 var Request = class extends GlobalRequest {
