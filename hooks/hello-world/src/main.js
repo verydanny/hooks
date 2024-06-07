@@ -2,6 +2,7 @@
  * Using node-21.0 open-runtime
  */
 import { fileURLToPath } from 'node:url'
+import { html, raw } from 'hono/html'
 import * as path from 'node:path'
 import * as fs from 'node:fs'
 import { Readable, Stream } from 'node:stream'
@@ -15,7 +16,11 @@ const app = new Hono()
 app.use('/static/*', serveStatic({ root: 'src/function' }))
 
 app.get('/', (c) => c.html('Hello open-runtime!'))
-app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
+app.get('/some/other/route', (c) => c.html(
+  html`<html>
+    <h1>Hello World</h1>
+  </html>`
+))
 
 export default async ({ req, res, log, error }) => {
   const requestListener = getRequestListener(app.fetch, {
