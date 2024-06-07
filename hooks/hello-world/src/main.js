@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { Client } from 'node-appwrite'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Buffer } from 'node:buffer'
+import * as fs from 'node:fs'
 
 const app = new Hono()
 
@@ -43,6 +44,8 @@ export default async ({ req, res, log, error }) => {
   const bufferFromArrayBuffer = Buffer.from(awaitArrayBuffer, 'utf-8')
 
   log(process.cwd())
+
+  log(fs.readdirSync(process.cwd()))
 
   return res.send(bufferFromArrayBuffer, 200, {
     'Content-Type': contentType,
