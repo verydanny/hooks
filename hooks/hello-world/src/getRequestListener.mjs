@@ -393,7 +393,7 @@ var getRequestListener = (fetchCallback, options = {}) => {
   
       try {
         req = newRequest(incoming, options.hostname);
-        res = fetchCallback(req, { incoming, outgoing, logger: options?.logger });
+        res = fetchCallback(req, { incoming, outgoing });
   
         // if (cacheKey in res) {
         //   logger.info('Is there')
