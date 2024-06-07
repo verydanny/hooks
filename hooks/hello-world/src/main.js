@@ -35,16 +35,18 @@ export default async ({ req, res, log, error }) => {
   const initRequestListener = requestListener(error)
 
   try {
-    const returnedRequest = initRequestListener(req, res)
-    // Fix to stream blob with stream chunks based on content-size
-    // const streamBlob = (await returnedRequest.blob()).stream()
+    const response = await initRequestListener(req, res)
 
-    if (returnedRequest?.body?.constructor?.name === 'ReadableStream') {
-      const webToReadableStream = Readable.fromWeb(returnedRequest.body, {
+    // Fix to stream blob with stream chunks based on content-size
+    // const streamBlob = (await response.blob()).stream()
+
+    if (response?.body?.constructor?.name === 'ReadableStream') {
+      const webToReadableStream = Readable.fromWeb(response.body, {
         encoding: 'utf-8',
       })
 
-      const contentType = returnedRequest.headers.get('Content-Type')
+      const contentType = response.headers.get('Content-Type')
+
       return res.send(webToReadableStream, 200, {
         'Content-Type': contentType,
       })
