@@ -5,7 +5,7 @@ import { Buffer } from 'node:buffer'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: '' }))
+app.use('/static/*', serveStatic({ root: '../' }))
 app.get('/', (c) => c.text('Hello Node.js!'))
 app.get('/some/other/route', (c) => c.html('<html>Some html</html>'))
 
@@ -39,8 +39,10 @@ export default async ({ req, res, log, error }) => {
   const output = await app.fetch(newRequest)
 
   const contentType = output.headers.get('Content-Type')
-  const awaitSomething = await output.arrayBuffer()
-  const bufferFromArrayBuffer = Buffer.from(awaitSomething)
+  const awaitArrayBuffer = output.arrayBuffer()
+  const bufferFromArrayBuffer = Buffer.from(awaitArrayBuffer, 'utf-8')
+
+  log(process.cwd())
 
   return res.send(bufferFromArrayBuffer, 200, {
     'Content-Type': contentType,
