@@ -30,7 +30,7 @@ export default async ({ req, res, log, error }) => {
 
   try {
     const response = await initRequestListener(req, res)
-    const normalizedStream = Readable.fromWeb(await response.body)
+    const normalizedStream = Readable.fromWeb(response.body)
     let headers = {}
 
     for (const [key, value] of response.headers.entries()) {
