@@ -56,7 +56,7 @@ export default async ({ req, res, log, error }) => {
 
     // const normalizedStream = Readable.fromWeb(response.body)
 
-    return res.send(Readable.from(await response.body()), 200, headers)
+    return res.send(Readable.from(response.body()), 200, headers)
   } catch (e) {
     error(e)
   }
