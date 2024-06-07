@@ -15,6 +15,7 @@ const requestListener = getRequestListener(app.fetch, {
 })
 
 export default async ({ req, res, log, error }) => {
+  const app = new Hono()
   const initRequestListener = requestListener(error)
 
   /**
@@ -35,8 +36,6 @@ export default async ({ req, res, log, error }) => {
 
   log(process.cwd())
   log(fs.readdirSync(__dirname).join('\n'))
-
-  const app = new Hono()
 
   try {
     const response = await initRequestListener(req, res)
