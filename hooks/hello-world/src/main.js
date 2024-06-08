@@ -47,11 +47,6 @@ export default async ({ req, res, log, error }) => {
       headers[key] = value
     }
 
-    const theBody = response.body
-
-    log(response.body instanceof Stream)
-    log(Readable.fromWeb(response.body) instanceof Stream)
-
     return res.send(Readable.fromWeb(response.body), 200, headers)
   } catch (e) {
     error(e)
