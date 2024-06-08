@@ -47,7 +47,7 @@ export default async ({ req, res, log, error }) => {
       headers[key] = value
     }
 
-    const theBody = await response.body.text()
+    const theBody = await response.text()
 
     return res.send(theBody, 200, headers)
   } catch (e) {
