@@ -40,7 +40,7 @@ export default async ({ req, res, log, error }) => {
 
     const theBody = await response.body.text()
 
-    return res.send(Readable.from(response.body), 200, headers)
+    return res.send(theBody, 200, headers)
   } catch (e) {
     error(e)
   }
