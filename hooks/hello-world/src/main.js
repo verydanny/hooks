@@ -40,7 +40,7 @@ export default async ({ req, res, log, error }) => {
         body
       }
     )
-    const response = app.fetch(request)
+    const response = await app.fetch(request)
 
     let headers = {}
     for (const [key, value] of response.headers.entries()) {
