@@ -150,6 +150,7 @@ var serveStatic = (options = { root: "" }) => {
       c.header("Content-Length", size.toString());
       return c.body(createStreamBody(createReadStream(path)), 200);
     }
+
     c.header("Accept-Ranges", "bytes");
     c.header("Date", stat.birthtime.toUTCString());
     const parts = range.replace(/bytes=/, "").split("-", 2);
