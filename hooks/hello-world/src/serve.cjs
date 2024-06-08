@@ -278,8 +278,6 @@ const action = async (req, res) => {
   res.setHeader('x-open-runtimes-logs', encodeURIComponent(logs.join('\n')))
   res.setHeader('x-open-runtimes-errors', encodeURIComponent(errors.join('\n')))
 
-  console.log(output)
-
   return send(res, output.statusCode, output.body)
 }
 
