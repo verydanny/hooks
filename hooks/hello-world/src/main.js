@@ -31,7 +31,16 @@ export default async ({ req, res, log, error }) => {
   const body = req?.method === 'GET' || req?.method === 'HEAD' ? undefined : req.body
 
   try {
-    const response = await initRequestListener(req, res)
+    // const response = await initRequestListener(req, res)
+    const request = new Request(
+      new URL(req.url),
+      {
+        headers: req.headers,
+        method: req.method,
+        body
+      }
+    )
+    const response = app.fetch(request)
 
     let headers = {}
     for (const [key, value] of response.headers.entries()) {
