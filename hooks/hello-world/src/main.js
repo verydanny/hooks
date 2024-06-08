@@ -47,7 +47,7 @@ export default async ({ req, res, log, error }) => {
       headers[key] = value
     }
 
-    return res.send(Readable.fromWeb(response.body), 200, headers)
+    return res.send(Buffer.from(await response.arrayBuffer()), 200, headers)
   } catch (e) {
     error(e)
   }
