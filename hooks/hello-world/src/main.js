@@ -3,20 +3,18 @@
  */
 // import { fileURLToPath } from 'node:url'
 import { html } from 'hono/html'
-// import * as path from 'node:path'
-// import * as fs from 'node:fs'
 import { Readable } from 'node:stream'
 import { getRequestListener } from './getRequestListener.mjs'
 
 import { Hono } from 'hono'
+import { RegExpRouter } from 'hono/router/reg-exp-router'
 import { serveStatic } from './serveStatic.mjs'
 
-const app = new Hono()
+const app = new Hono({ router: new RegExpRouter() })
 
 // Static files work perfectly
 app.use('/static/*', serveStatic({ root: 'src/function' }))
 
-// Anything text or JSON-based fails
 app.get('/', (c) => c.html(html`
   <html>
   <html lang="en">
@@ -28,12 +26,24 @@ app.get('/', (c) => c.html(html`
   </html>
 `))
 
-// JSON-test, also not working
+app.get('/api/:param', c => {
+  const param = c.req.param('param')
+  const query = c.req.query('q')
+
+  return c.json({
+    param,
+    query
+  })
+})
+
+// JSON-test, confirmed working now
 app.get('/some/other/route', (c) => c.json({
   payload: {
     username: 'Testing'
   }
 }))
+
+
 
 const initListener = getRequestListener(app.fetch, {
   overrideGlobalObjects: true

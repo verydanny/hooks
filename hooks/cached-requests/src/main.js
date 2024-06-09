@@ -28,7 +28,6 @@ app.get('/', (c) => c.html(html`
   </html>
 `))
 
-// JSON-test, also not working
 app.get('/some/other/route', (c) => c.json({
   payload: {
     username: 'Testing'
