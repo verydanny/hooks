@@ -56,7 +56,7 @@
 // })
 
 export default async ({ req, res, log, error }) => {
-  return req.text('Hello world', 200, {
+  return res.text('Hello world', 200, {
     'content-type': 'text/plain; charset=UTF-8'
   })
   // const listener = initListener(error)
