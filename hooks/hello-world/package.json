@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write .",
-    "start": "OPEN_RUNTIMES_ENTRYPOINT=main.js node ./src/serve.cjs"
+    "start": "OPEN_RUNTIMES_ENTRYPOINT=src/main.js node ./src/serve.cjs"
   },
   "dependencies": {
     "hono": "^4.4.4"

@@ -7,8 +7,7 @@ var Request = class extends GlobalRequest {
       input = input[getRequestCache]()
     }
     if (typeof options?.body?.getReader !== 'undefined') {
-      ;
-      options.duplex ??= 'half'
+      ;options.duplex ??= 'half'
     }
 
     super(input, options)

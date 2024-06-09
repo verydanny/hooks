@@ -13,7 +13,7 @@ import { getRequestListener } from './getRequestListener.mjs'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: 'src/function' }))
+app.use('/static/*', serveStatic({ root: '' }))
 
 app.get('/', (c) => c.html('Hello open-runtime!'))
 app.get('/some/other/route', (c) => c.html(
@@ -47,7 +47,7 @@ export default async ({ req, res, log, error }) => {
       headers[key] = value
     }
 
-    return res.send(Buffer.from(await response.arrayBuffer()), 200, headers)
+    return res.send(Readable.from((await response.blob()).stream()), 200, headers)
   } catch (e) {
     error(e)
   }

@@ -1,5 +1,6 @@
 // src/serve-static.ts
 import { createReadStream, existsSync, lstatSync } from "fs";
+import { Readable } from 'node:stream'
 
 // node_modules/hono/dist/utils/filepath.js
 var getFilePath = (options) => {
@@ -94,22 +95,23 @@ var baseMimes = {
 };
 
 // src/serve-static.ts
-var createStreamBody = (stream) => {
-  const body = new ReadableStream({
-    start(controller) {
-      stream.on("data", (chunk) => {
-        controller.enqueue(chunk);
-      });
-      stream.on("end", () => {
-        controller.close();
-      });
-    },
-    cancel() {
-      stream.destroy();
-    }
-  });
-  return body;
-};
+// var createStreamBody = (stream) => {
+//   const body = new Readable({
+//     start(controller) {
+//       stream.on("data", (chunk) => {
+//         controller.enqueue(chunk);
+//       });
+//       stream.on("end", () => {
+//         controller.close();
+//       });
+//     },
+//     cancel() {
+//       stream.destroy();
+//     }
+//   });
+//   return body;
+// };
+
 var serveStatic = (options = { root: "" }) => {
   return async (c, next) => {
   
@@ -148,7 +150,10 @@ var serveStatic = (options = { root: "" }) => {
     const range = c.req.header("range") || "";
     if (!range) {
       c.header("Content-Length", size.toString());
-      return c.body(createStreamBody(createReadStream(path)), 200);
+
+      const stream = new Readable().wrap(createReadStream(path))
+
+      return c.body(stream, 200);
     }
 
     c.header("Accept-Ranges", "bytes");
@@ -160,10 +165,11 @@ var serveStatic = (options = { root: "" }) => {
       end = size - 1;
     }
     const chunksize = end - start + 1;
-    const stream = createReadStream(path, { start, end });
+    const stream = new Readable().wrap(createReadStream(path, { start, end }));
     c.header("Content-Length", chunksize.toString());
     c.header("Content-Range", `bytes ${start}-${end}/${stat.size}`);
-    return c.body(createStreamBody(stream), 206);
+
+    return c.body(stream, 206);
   };
 };
 export {
