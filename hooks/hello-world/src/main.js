@@ -27,7 +27,7 @@ app.get('/', (c) => c.html(html`
   </html>
 `))
 
-// JSON-test
+// JSON-test, also not working
 app.get('/some/other/route', (c) => c.json({
   payload: {
     username: 'Testing'
@@ -46,7 +46,11 @@ export default async ({ req, res, log, error }) => {
         body
       }
     )
+
     const response = await app.fetch(request)
+    const blob = await response.blob()
+
+    log(blob.type)
 
     let headers = {}
     for (const [key, value] of response.headers.entries()) {
