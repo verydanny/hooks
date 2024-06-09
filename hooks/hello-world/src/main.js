@@ -56,8 +56,8 @@
 // })
 
 export default async ({ req, res, log, error }) => {
-  return res.text('Hello world', 200, {
-    'content-type': 'text/plain; charset=UTF-8'
+  return res.json({
+    hello: 'world'
   })
   // const listener = initListener(error)
   // const body = (req.method === 'GET' || req.method === 'HEAD') ? undefined : body
