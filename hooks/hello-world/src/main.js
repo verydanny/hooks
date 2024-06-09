@@ -6,11 +6,10 @@ import { html } from 'hono/html'
 import { Readable } from 'node:stream'
 import { getRequestListener } from './getRequestListener.mjs'
 
-import { Hono } from 'hono'
-import { RegExpRouter } from 'hono/router/reg-exp-router'
+import { Hono } from 'hono/tiny'
 import { serveStatic } from './serveStatic.mjs'
 
-const app = new Hono({ router: new RegExpRouter() })
+const app = new Hono()
 
 // Static files work perfectly
 app.use('/static/*', serveStatic({ root: 'src/function' }))
@@ -33,6 +32,15 @@ app.get('/api/:param', c => {
   return c.json({
     param,
     query
+  })
+})
+
+app.post('/api/post/:someparam', c => {
+  const param = c.req.param('someparam')
+
+  return c.json({
+    status: 'success',
+    param
   })
 })
 
