@@ -11,13 +11,13 @@
     "try": "OPEN_RUNTIMES_ENTRYPOINT=main.js node ./serve.cjs"
   },
   "dependencies": {
-    "@astrojs/check": "^0.7.0",
     "astro": "^4.10.1",
     "hono": "^4.4.4",
-    "hono-astro-adapter": "^1.0.11",
-    "typescript": "^5.4.5"
+    "hono-astro-adapter": "^1.0.11"
   },
   "devDependencies": {
+    "typescript": "^5.4.5",
+    "@astrojs/check": "^0.7.0",
      "micro": "9.3.4"
   }
 }
