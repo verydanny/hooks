@@ -20,5 +20,6 @@
     "@astrojs/check": "^0.7.0",
     "micro": "9.3.4",
     "typescript": "^5.4.5"
-  }
+  },
+  "packageManager": "pnpm@9.2.0"
 }
