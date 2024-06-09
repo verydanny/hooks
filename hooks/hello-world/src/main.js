@@ -6,7 +6,7 @@ import { html } from 'hono/html'
 import { Readable } from 'node:stream'
 import { getRequestListener } from './getRequestListener.mjs'
 
-import { Hono } from 'hono/tiny'
+import { Hono } from 'hono'
 import { serveStatic } from './serveStatic.mjs'
 
 const app = new Hono()
@@ -51,15 +51,22 @@ app.get('/some/other/route', (c) => c.json({
   }
 }))
 
-const initListener = getRequestListener(app.fetch, {
-  overrideGlobalObjects: true
-})
+// const initListener = getRequestListener(app.fetch, {
+//   overrideGlobalObjects: true
+// })
 
 export default async ({ req, res, log, error }) => {
-  const listener = initListener(error)
+  // const listener = initListener(error)
+  const body = (req.method === 'GET' || req.method === 'HEAD') ? undefined : body
+  const request = new Request(new URL(req.url), {
+    body,
+    method: req.method,
+    headers: req.headers
+  })
 
   try {
-    const response = await listener(req, res)
+    const response = app.fetch(request)
+    // const response = await listener(req, res)
     const blob = await response.blob()
 
     let headers = {}
