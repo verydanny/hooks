@@ -12,13 +12,27 @@ import { serveStatic } from './serveStatic.mjs'
 
 const app = new Hono()
 
+// Static files work perfectly
 app.use('/static/*', serveStatic({ root: 'src/function' }))
-app.get('/', (c) => c.html('Hello open-runtime!'))
-app.get('/some/other/route', (c) => c.html(
-  html`<html>
+
+// Anything text or JSON-based fails
+app.get('/', (c) => c.html(html`
+  <html>
+  <html lang="en">
+  <head>
+  </head>
+  <body>
     <h1>Hello World</h1>
-  </html>`
-))
+  </body>
+  </html>
+`))
+
+// JSON-test
+app.get('/some/other/route', (c) => c.json({
+  payload: {
+    username: 'Testing'
+  }
+}))
 
 export default async ({ req, res, log, error }) => {
   const body = req?.method === 'GET' || req?.method === 'HEAD' ? undefined : req.body
