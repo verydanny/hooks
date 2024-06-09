@@ -1,11 +1,11 @@
 config:
   # This is a test server run by team Artillery
   # It's designed to be highly scalable
-  target: https://66661235dde56a4a5107.megachungus.com
+  target: https://6665fd73a152564241c2.megachungus.com
   phases:
     - duration: 60
-      arrivalRate: 10
-      rampTo: 100
+      arrivalRate: 20
+      rampTo: 500
       name: Testing phase
   # Load & configure a couple of useful plugins
   # https://docs.art/reference/extensions

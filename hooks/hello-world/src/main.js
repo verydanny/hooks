@@ -2,88 +2,91 @@
  * Using node-21.0 open-runtime
  */
 // import { fileURLToPath } from 'node:url'
-import { html } from 'hono/html'
-import { Readable } from 'node:stream'
-import { getRequestListener } from './getRequestListener.mjs'
+// import { html } from 'hono/html'
+// import { Readable } from 'node:stream'
+// import { getRequestListener } from './getRequestListener.mjs'
 
-import { Hono } from 'hono'
-import { serveStatic } from './serveStatic.mjs'
+// import { Hono } from 'hono'
+// import { serveStatic } from './serveStatic.mjs'
 
-const app = new Hono()
+// const app = new Hono()
 
-// Static files work perfectly
-app.use('/static/*', serveStatic({ root: 'src/function' }))
+// // Static files work perfectly
+// app.use('/static/*', serveStatic({ root: 'src/function' }))
 
-app.get('/', (c) => c.html(html`
-  <html>
-  <html lang="en">
-  <head>
-  </head>
-  <body>
-    <h1>Hello World</h1>
-  </body>
-  </html>
-`))
+// app.get('/', (c) => c.html(html`
+//   <html>
+//   <html lang="en">
+//   <head>
+//   </head>
+//   <body>
+//     <h1>Hello World</h1>
+//   </body>
+//   </html>
+// `))
 
-app.get('/api/:param', c => {
-  const param = c.req.param('param')
-  const query = c.req.query('q')
+// app.get('/api/:param', c => {
+//   const param = c.req.param('param')
+//   const query = c.req.query('q')
 
-  return c.json({
-    param,
-    query
-  })
-})
+//   return c.json({
+//     param,
+//     query
+//   })
+// })
 
-app.post('/api/post/:someparam', c => {
-  const param = c.req.param('someparam')
+// app.post('/api/post/:someparam', c => {
+//   const param = c.req.param('someparam')
 
-  return c.json({
-    status: 'success',
-    param
-  })
-})
+//   return c.json({
+//     status: 'success',
+//     param
+//   })
+// })
 
-// JSON-test, confirmed working now
-app.get('/some/other/route', (c) => c.json({
-  payload: {
-    username: 'Testing'
-  }
-}))
+// // JSON-test, confirmed working now
+// app.get('/some/other/route', (c) => c.json({
+//   payload: {
+//     username: 'Testing'
+//   }
+// }))
 
 // const initListener = getRequestListener(app.fetch, {
 //   overrideGlobalObjects: true
 // })
 
 export default async ({ req, res, log, error }) => {
-  // const listener = initListener(error)
-  const body = (req.method === 'GET' || req.method === 'HEAD') ? undefined : body
-  const request = new Request(new URL(req.url), {
-    body,
-    method: req.method,
-    headers: req.headers
+  return req.text('Hello world', 200, {
+    'content-type': 'text/plain; charset=UTF-8'
   })
+  // const listener = initListener(error)
+  // const body = (req.method === 'GET' || req.method === 'HEAD') ? undefined : body
+  // const request = new Request(new URL(req.url), {
+  //   body,
+  //   method: req.method,
+  //   headers: req.headers
+  // })
 
-  try {
-    const response = app.fetch(request)
-    // const response = await listener(req, res)
-    const blob = await response.blob()
+  // try {
+  //   const response = app.fetch(request)
+  //   // const response = await listener(req, res)
+  //   const blob = await response.blob()
 
-    let headers = {}
-    for (const [key, value] of response.headers.entries()) {
-      headers[key] = value
-    }
+  //   let headers = {}
+  //   for (const [key, value] of response.headers.entries()) {
+  //     headers[key] = value
+  //   }
 
-    // This is only needed on Appwrite, if this isn't included
-    // then text and json-based routes will loop forever
-    if (!headers['content-length'] && blob.size) {
-      headers['content-length'] = blob.size.toString()
-    }
+  //   // This is only needed on Appwrite, if this isn't included
+  //   // then text and json-based routes will loop forever
+  //   if (!headers['content-length'] && blob.size) {
+  //     headers['content-length'] = blob.size.toString()
+  //   }
 
-    headers['Cache-Control'] = "max-age=14400"
+  //   headers['Cache-Control'] = "max-age=14400"
 
-    return res.send(Readable.from(blob.stream()), 200, headers)
-  } catch (e) {
-    error(e)
-  }
+  //   return res.send(Readable.from(blob.stream()), 200, headers)
+  // } catch (e) {
+  //   error(e)
+  // }
 }
