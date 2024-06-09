@@ -1,10 +1,6 @@
 /**
  * Using node-21.0 open-runtime
  */
-// import { fileURLToPath } from 'node:url'
-import { html } from 'hono/html'
-// import * as path from 'node:path'
-// import * as fs from 'node:fs'
 import { handler as ssrHandler } from './dist/server/entry.mjs'
 import { Readable } from 'node:stream'
 import { getRequestListener } from './getRequestListener.mjs'

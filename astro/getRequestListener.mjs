@@ -413,7 +413,6 @@ var getRequestListener = (fetchCallback, options = {}) => {
           return errorHandler(e, outgoing);
         }
       }
-  
       // try {
       //   return responseViaResponseObject(res, outgoing, options);
       // } catch (e) {
