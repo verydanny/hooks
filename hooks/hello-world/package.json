@@ -1,0 +1,21 @@
+{
+  "name": "starter-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write .",
+    "start": "OPEN_RUNTIMES_ENTRYPOINT=src/main.js node ./src/serve.cjs"
+  },
+  "dependencies": {
+    "hono": "^4.4.4"
+  },
+  "devDependencies": {
+    "node-appwrite": "^13.0.0",
+    "@hono/node-server": "^1.11.2",
+    "prettier": "^3.3.1",
+    "typescript": "^5.4.5",
+    "micro": "9.3.4"
+  }
+}
