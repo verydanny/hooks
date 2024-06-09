@@ -10,7 +10,7 @@ export default defineConfig({
       transformer: "lightningcss",
     },
     build: {
-      assetsInlineLimit: 1024
+      assetsInlineLimit: 40960
     }
   },
 });
