@@ -9,8 +9,8 @@ export default defineConfig({
     css: {
       transformer: "lightningcss",
     },
+    build: {
+      assetsInlineLimit: 1024
+    }
   },
-  build: {
-    inlineStylesheets: 'never'
-  }
 });

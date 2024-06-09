@@ -43,8 +43,6 @@ app.get('/some/other/route', (c) => c.json({
   }
 }))
 
-
-
 const initListener = getRequestListener(app.fetch, {
   overrideGlobalObjects: true
 })
@@ -66,6 +64,8 @@ export default async ({ req, res, log, error }) => {
     if (!headers['content-length'] && blob.size) {
       headers['content-length'] = blob.size
     }
+
+    headers['Cache-Control'] = "max-age=14400"
 
     return res.send(Readable.from(blob.stream()), 200, headers)
   } catch (e) {
