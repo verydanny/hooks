@@ -13,7 +13,7 @@ import { getRequestListener } from './getRequestListener.mjs'
 
 const app = new Hono()
 
-app.use('/static/*', serveStatic({ root: 'src/funtion' }))
+app.use('/static/*', serveStatic({ root: 'src/function' }))
 
 app.get('/', (c) => c.html('Hello open-runtime!'))
 app.get('/some/other/route', (c) => c.html(
