@@ -51,6 +51,7 @@ export default async ({ req, res, log, error }) => {
     const blob = await response.blob()
 
     log(blob.type)
+    log(blob.size)
 
     let headers = {}
     for (const [key, value] of response.headers.entries()) {
