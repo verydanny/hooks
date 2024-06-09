@@ -58,6 +58,10 @@ export default async ({ req, res, log, error }) => {
       headers[key] = value
     }
 
+    if (!headers['content-length'] && size) {
+      headers['content-length'] = size
+    }
+
     log(JSON.stringify(headers, null, 2))
 
     return res.send(Readable.from(blob.stream()), 200, headers)
