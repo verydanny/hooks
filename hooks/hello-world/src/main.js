@@ -57,7 +57,7 @@ export default async ({ req, res, log, error }) => {
       headers[key] = value
     }
 
-    return res.send(Readable.from((await response.blob()).stream()), 200, headers)
+    return res.send(Readable.from(blob.stream()), 200, headers)
   } catch (e) {
     error(e)
   }
