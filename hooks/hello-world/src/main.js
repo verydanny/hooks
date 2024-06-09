@@ -77,7 +77,7 @@ export default async ({ req, res, log, error }) => {
     // This is only needed on Appwrite, if this isn't included
     // then text and json-based routes will loop forever
     if (!headers['content-length'] && blob.size) {
-      headers['content-length'] = blob.size
+      headers['content-length'] = blob.size.toString()
     }
 
     headers['Cache-Control'] = "max-age=14400"
