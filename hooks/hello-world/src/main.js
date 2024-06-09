@@ -50,19 +50,16 @@ export default async ({ req, res, log, error }) => {
     const response = await app.fetch(request)
     const blob = await response.blob()
 
-    log(blob.type)
-    log(blob.size)
-
     let headers = {}
     for (const [key, value] of response.headers.entries()) {
       headers[key] = value
     }
 
+    // This is only needed on Appwrite, if this isn't included
+    // then text and json-based routes will loop forever
     if (!headers['content-length'] && blob.size) {
       headers['content-length'] = blob.size
     }
-
-    log(JSON.stringify(headers, null, 2))
 
     return res.send(Readable.from(blob.stream()), 200, headers)
   } catch (e) {
