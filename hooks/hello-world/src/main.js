@@ -9,7 +9,6 @@ import { Readable } from 'node:stream'
 
 import { Hono } from 'hono'
 import { serveStatic } from './serveStatic.mjs'
-import { getRequestListener } from './getRequestListener.mjs'
 
 const app = new Hono()
 
