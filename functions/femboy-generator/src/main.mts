@@ -87,7 +87,7 @@ if (cachedFemboys.length === 0) {
 
     for (let { file_url } of response.post) {
       cachedFemboys.push({
-        mime: baseMimes[extname(file_url) as keyof typeof baseMimes],
+        mime: baseMimes[extname(file_url).slice(1) as keyof typeof baseMimes],
         file_url,
       })
     }

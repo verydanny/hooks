@@ -73,7 +73,7 @@ if (cachedFemboys.length === 0) {
         const response = (await result.json());
         for (let { file_url } of response.post) {
             cachedFemboys.push({
-                mime: baseMimes[extname(file_url)],
+                mime: baseMimes[extname(file_url).slice(1)],
                 file_url,
             });
         }
