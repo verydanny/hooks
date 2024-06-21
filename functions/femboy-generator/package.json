@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write .",
-    "start": "OPEN_RUNTIMES_ENTRYPOINT=main.mjs node ./src/serve.cjs",
-    "compile": "tsc"
+    "start": "nodemon --env-file=.env ./lib/serve.cjs",
+    "compile": "tsc",
+    "compile:watch": "tsc -w"
   },
   "dependencies": {
     "hono": "^4.4.7"
@@ -15,9 +16,10 @@
   "devDependencies": {
     "@tsconfig/node21": "^21.0.3",
     "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^20.14.7",
     "micro": "9.3.4",
+    "nodemon": "^3.1.4",
     "prettier": "^3.3.2",
-    "typescript": "^5.5.2",
-    "@types/node": "^20.14.7"
+    "typescript": "^5.5.2"
   }
 }

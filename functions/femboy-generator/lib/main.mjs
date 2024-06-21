@@ -7,16 +7,48 @@ import { Readable } from "node:stream";
 import { getRequestListener } from "./getRequestListener.mjs";
 import { Hono } from "hono";
 const app = new Hono();
-app.get("/", (c) => c.html(html `
+const fetchAPI = `https://gelbooru.com/index.php?api_key=${process.env.GELBOORU_API}&user_id=${process.env.GELBOORU_USER_ID}&page=dapi&s=post&q=index&json=1&tags=trap+-rating:e`;
+const cachedFemboys = [];
+// Lazy fetch all the bois
+if (cachedFemboys.length === 0) {
+    fetch(fetchAPI).then(async (result) => {
+        const response = await result.json();
+        for (let { file_url } of response.post) {
+            cachedFemboys.push(file_url);
+        }
+    });
+}
+app.get("/", (c) => {
+    if (cachedFemboys.length > 0) {
+        const pluckAboy = cachedFemboys[Math.floor(Math.random() * cachedFemboys.length)];
+        return c.html(html `
+      <html>
+        <html lang="en">
+          <head>
+            <style>
+              img {
+                max-width: 500px;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${pluckAboy}" />
+          </body>
+        </html>
+      </html>
+    `);
+    }
+    return c.html(html `
     <html>
       <html lang="en">
         <head> </head>
         <body>
-          <h1>Hello World</h1>
+          <h1>I haven't cached yet, please reload me</h1>
         </body>
       </html>
     </html>
-  `));
+  `);
+});
 app.get("/api/:param", (c) => {
     const param = c.req.param("param");
     const query = c.req.query("q");
