@@ -10,6 +10,7 @@ import { Hono } from "hono"
 import type { Context } from "./types.js"
 
 const app = new Hono()
+const fetchAPI = `https://gelbooru.com/index.php?api_key=${process.env.GELBOORU_API}&user_id=${process.env.GELBOORU_USER_ID}&page=dapi&s=post&q=index&json=1`
 
 app.get("/", (c) =>
   c.html(html`
