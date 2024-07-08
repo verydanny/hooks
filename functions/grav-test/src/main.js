@@ -5,7 +5,7 @@ import { serveStatic } from "@gravlabs/appwrite-hono-adapter-node/serveStatic"
 const app = new Hono()
 
 app.get("/static/*", serveStatic({
-    root: './examples',
+    root: '',
 }))
 
 app.get("/", (context) =>
