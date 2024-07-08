@@ -22,7 +22,7 @@ app.get("/", (context) =>
 )
 
 export default (context) => {
-  context.log(isOpenRuntimes)
+  context.log(context.res.binary)
 
   return serve(app)(context)
 }
