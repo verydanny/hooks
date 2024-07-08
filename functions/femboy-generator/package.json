@@ -10,10 +10,6 @@
     "compile": "tsc",
     "compile:watch": "tsc -w"
   },
-  "dependencies": {
-    "hono": "^4.4.12",
-    "@gravlabs/appwrite-hono-adapter-node": "^0.1.0"
-  },
   "devDependencies": {
     "@tsconfig/node21": "^21.0.3",
     "@tsconfig/strictest": "^2.0.5",
@@ -22,5 +18,9 @@
     "nodemon": "^3.1.4",
     "prettier": "^3.3.2",
     "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@gravlabs/appwrite-hono-adapter-node": "^0.1.0",
+    "hono": "^4.4.12"
   }
 }

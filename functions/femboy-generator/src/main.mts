@@ -3,10 +3,10 @@
  */
 // import { fileURLToPath } from 'node:url'
 import { html } from "hono/html"
-import { serve } from "@gravlabs/appwrite-hono-adapter-node"
 import { extname } from "node:path"
 
 import { Hono } from "hono"
+import { serve } from "@gravlabs/appwrite-hono-adapter-node"
 
 interface Post {
   file_url: string
