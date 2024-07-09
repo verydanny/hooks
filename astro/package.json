@@ -16,15 +16,16 @@
     }
   },
   "dependencies": {
-    "astro": "^4.10.1",
-    "hono": "^4.4.4",
+    "astro": "^4.11.5",
+    "hono": "^4.4.12",
     "hono-astro-adapter": "^1.0.11",
-    "lightningcss": "^1.25.1"
+    "lightningcss": "^1.25.1",
+    "@gravlabs/appwrite-hono-adapter-node": "0.3.7"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.7.0",
+    "@astrojs/check": "^0.8.0",
     "micro": "9.3.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   },
   "packageManager": "pnpm@9.2.0"
 }
