@@ -22,7 +22,7 @@ app.get("/", (context) =>
 )
 
 export default (context) => {
-  context.log(context.res.binary)
+  context.log(context?.res?.binary)
 
   return serve(app)(context)
 }
