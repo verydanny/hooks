@@ -9,7 +9,7 @@
     "start": "OPEN_RUNTIMES_ENTRYPOINT=src/main.js node ./src/serve.cjs"
   },
   "dependencies": {
-    "@gravlabs/appwrite-hono-adapter-node": "0.3.3",
+    "@gravlabs/appwrite-hono-adapter-node": "0.3.4",
     "hono": "^4.4.12"
   }
 }
