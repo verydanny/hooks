@@ -10,6 +10,6 @@
   },
   "dependencies": {
     "hono": "^4.4.12",
-    "@gravlabs/appwrite-hono-adapter-bun": "^0.1.1"
+    "@gravlabs/appwrite-hono-adapter-bun": "^0.2.0"
   }
 }
