@@ -15,7 +15,7 @@ app.get('/static/*', serveStatic({
 
 app.get('/', (c) => {
     c.env.log(
-        path.relative(process.cwd(), '../static')
+        path.relative(process.cwd(), path.resolve(import.meta.dirname, '../static'))
     )
 
     return c.html(`
