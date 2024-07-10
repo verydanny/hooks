@@ -8,7 +8,7 @@ import { Hono } from 'hono'
 const app = new Hono()
 
 app.get('/static/*', serveStatic({
-    root: '/server'
+    root: './'
 }))
 
 app.get('/', (c) =>
