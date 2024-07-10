@@ -1,0 +1,15 @@
+{
+  "name": "starter-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write .",
+    "start": "OPEN_RUNTIMES_ENTRYPOINT=src/main.js node ./src/serve.cjs"
+  },
+  "dependencies": {
+    "hono": "^4.4.12",
+    "@gravlabs/appwrite-hono-adapter-bun": "^0.1.1"
+  }
+}
