@@ -12,11 +12,13 @@ app.get('/static/*', serveStatic({
     root: './'
 }))
 
-app.get('/', (c) =>
-    c.html(`
+app.get('/', (c) => {
+    c.env.log('Logs are logging')
+
+    return c.html(`
         <h1>Testing Hono</h1>
-    `),
-)
+    `)
+})
 
 export default serve(app)
 
